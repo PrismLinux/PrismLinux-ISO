@@ -1,0 +1,5 @@
+NAME="CrystalLinux"
+PRETTY_NAME="CrystalLinux"
+ID=CrystalLinux
+BUILD_ID=rolling
+LOGO=arch
