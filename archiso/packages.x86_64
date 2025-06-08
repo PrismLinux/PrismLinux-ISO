@@ -11,7 +11,6 @@ bind
 bolt
 brltty
 broadcom-wl
-bash-completion
 btrfs-progs
 clonezilla
 cloud-init
@@ -71,6 +70,7 @@ mkinitcpio-nfs-utils
 modemmanager
 mtools
 nano
+nano-syntax-highlighting
 nbd
 ndisc6
 nfs-utils
@@ -126,7 +126,6 @@ wpa_supplicant
 wvdial
 xfsprogs
 xl2tpd
-zsh
 
 ##### System Utilities
 sddm
