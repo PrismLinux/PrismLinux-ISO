@@ -1,5 +1,10 @@
 NAME="CrystalLinux"
 PRETTY_NAME="CrystalLinux"
-ID=CrystalLinux
+ID=arch
 BUILD_ID=rolling
-LOGO=arch
+ANSI_COLOR="38;2;23;147;209"
+HOME_URL="https://gitlab.com/crystalnetwork-studio/linux/CrystalLinux/CrystalLinux-ISO"
+DOCUMENTATION_URL="https://gitlab.com/crystalnetwork-studio/linux/CrystalLinux/CrystalLinux-ISO"
+SUPPORT_URL="https://gitlab.com/crystalnetwork-studio/linux/CrystalLinux/CrystalLinux-ISO"
+BUG_REPORT_URL="https://gitlab.com/crystalnetwork-studio/linux/CrystalLinux/CrystalLinux-ISO"
+LOGO=crystallinux
