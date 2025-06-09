@@ -41,11 +41,9 @@ def generate_checksum(file_path):
 def _parse_args():
     """Parses command line arguments."""
     parser = argparse.ArgumentParser(description="Build Crystal Linux ISO.")
-    # Changed default paths to be inside a 'build' directory at the root
     parser.add_argument("--work-dir", default="../build/work", help="Working directory for the build (defaults to ../build/work).")
     parser.add_argument("--output-dir", default="../build/out", help="Output directory for the ISO (defaults to ../build/out).")
     parser.add_argument("-c", "--clean", action="store_true", help="Clean the work directory before building.")
-    parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output.")
     return parser.parse_args()
 
 def _setup_paths(args):
@@ -109,8 +107,8 @@ def _copy_archiso_profile(archiso_source_dir, work_archiso_dir):
         print(f"Error copying archiso directory: {e}")
         return False
 
-def _run_mkarchiso(project_root, work_dir, output_dir, work_archiso_dir, verbose):
-    """Executes the mkarchiso command."""
+def _run_mkarchiso(project_root, work_dir, output_dir, work_archiso_dir):
+    """Executes the mkarchiso command with verbose output always enabled."""
     print(f"Starting ISO build in {work_archiso_dir}")
     original_cwd = os.getcwd()
     try:
@@ -121,15 +119,11 @@ def _run_mkarchiso(project_root, work_dir, output_dir, work_archiso_dir, verbose
         # though absolute paths should be fine regardless of CWD.
         os.chdir(project_root)
 
-        mkarchiso_command = ["sudo", "mkarchiso"]
-        if verbose:
-            mkarchiso_command.append("-v")
+        mkarchiso_command = ["sudo", "mkarchiso", "-v"]
         mkarchiso_command.extend(["-w", work_dir, "-o", output_dir, work_archiso_dir]) # Use absolute paths
 
-        # Fix syntax errors in f-string: remove escaped quotes
         print(f"Executing command: {' '.join(mkarchiso_command)}")
-        # Use Popen for potentially real-time output handling if verbose
-        # For simplicity here, keeping run but adding more robust error output
+        # Use Popen for real-time output
         process = subprocess.Popen(mkarchiso_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
 
         while True:
@@ -147,7 +141,6 @@ def _run_mkarchiso(project_root, work_dir, output_dir, work_archiso_dir, verbose
             print(f"mkarchiso exited with error code: {return_code}")
             return False
         return True
-    # Fix syntax errors in f-string: remove escaped quotes
     except subprocess.CalledProcessError as e:
         print(f"Error during mkarchiso execution: {e}")
         return False
@@ -228,7 +221,8 @@ def _handle_ownership(output_dir):
         except subprocess.CalledProcessError as e:
              print(f"Warning: Could not change ownership of {output_dir} to current user ({uid}:{gid}). Manual intervention may be required.")
              print(f"Command failed: {' '.join(e.cmd)}")
-             print(f"Stderr: {e.stderr.strip()}")
+             if e.stderr:
+                 print(f"Stderr: {e.stderr.strip()}")
              return False
         except FileNotFoundError:
              print("Warning: 'sudo' command not found. Could not change ownership. Manual intervention may be required.")
@@ -271,7 +265,6 @@ def _copy_package_list(work_dir, output_dir, final_iso_path):
 def main_build():
     """Main function to orchestrate the Crystal Linux ISO build process."""
     args = _parse_args()
-    verbose = args.verbose
     clean_first = args.clean
 
     # Call setup paths and check if all returned values are valid strings
@@ -301,7 +294,7 @@ def main_build():
     # work_archiso_dir is guaranteed to be a string here due to the assertion/previous checks
     update_version_file(os.path.join(work_archiso_dir, "airootfs"))
 
-    if not _run_mkarchiso(project_root, work_dir, output_dir, work_archiso_dir, verbose):
+    if not _run_mkarchiso(project_root, work_dir, output_dir, work_archiso_dir):
         print("mkarchiso build failed. Exiting.")
         return # Exit if mkarchiso fails
 
@@ -312,7 +305,6 @@ def main_build():
 
         package_list_dest = _copy_package_list(work_dir, output_dir, final_iso_path)
 
-        # Removed 'f' as it had no placeholders
         print("\nBuild process completed.")
         print(f"Final ISO located at: {final_iso_path}")
         if package_list_dest:
