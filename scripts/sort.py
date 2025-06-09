@@ -2,7 +2,7 @@
 
 import os
 
-def format_packages(file_path):
+def sort_packages(file_path):
     """
     Formats the content of a package list file alphabetically and removes duplicates.
 
@@ -35,4 +35,4 @@ def format_packages(file_path):
 
 if __name__ == "__main__":
     file_path = "../archiso/packages.x86_64"
-    format_packages(file_path)
+    sort_packages(file_path)
