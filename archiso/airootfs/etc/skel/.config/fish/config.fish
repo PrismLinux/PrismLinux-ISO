@@ -56,6 +56,19 @@ alias egrep="egrep --color=auto"
 alias fgrep="fgrep --color=auto"
 alias wget="wget -c"       # Resume wget by default
 
+# Git shortcuts
+if type -q git
+    alias g="git"
+    alias ga="git add"
+    alias gc="git commit"
+    alias gco="git checkout"
+    alias gd="git diff"
+    alias gs="git status"
+    alias gl="git log --oneline --graph --decorate"
+    alias gp="git push"
+    alias gpull="git pull"
+    alias gb="git branch"
+end
 
 # Custom functions are defined in ~/.config/fish/functions/
 

@@ -21,6 +21,7 @@ dnsmasq
 dolphin
 dosfstools
 e2fsprogs
+edk2-shell
 efibootmgr
 ethtool
 exfatprogs
@@ -28,6 +29,7 @@ eza
 f2fs-tools
 fakeroot
 fish
+git
 gpart
 gptfdisk
 grub
@@ -43,7 +45,6 @@ konsole
 kscreen
 ldns
 less
-lftp
 libfido2
 libusb-compat
 libwnck3
@@ -74,9 +75,6 @@ noto-fonts-cjk
 nss-mdns
 ntfs-3g
 ntp
-nvidia
-nvidia-settings
-nvidia-utils
 nvme-cli
 open-iscsi
 open-vm-tools

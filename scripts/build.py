@@ -24,7 +24,7 @@ def _get_privilege_command():
     if shutil.which("sudo"):
         print("Using 'sudo' for privilege escalation.")
         return ["sudo"]
-    
+
     return None
 
 PRIV_CMD_LIST = _get_privilege_command()
@@ -35,6 +35,7 @@ if PRIV_CMD_LIST is None:
 
 def generate_iso_filename():
     """Generates the ISO filename based on Crystal Linux naming convention and current date."""
+    # This function is no longer used for renaming, but kept as it was part of the original code structure.
     build_date = datetime.now().strftime("%Y%m%d")
     arch = "x86_64"
     return f"CrystalLinux-{build_date}-{arch}.iso"
@@ -83,11 +84,11 @@ def _setup_paths(args):
     os.makedirs(os.path.dirname(work_dir), exist_ok=True)
     os.makedirs(work_dir, exist_ok=True)
     os.makedirs(output_dir, exist_ok=True)
-    
+
     if not os.path.exists(archiso_source_dir):
         print(f"Error: Archiso source directory not found at {archiso_source_dir}", file=sys.stderr)
         return None, None, None, None, None
-    
+
     return work_dir, output_dir, project_root, archiso_source_dir, work_archiso_dir
 
 def _clean_work_dir(work_dir, clean_first):
@@ -96,7 +97,7 @@ def _clean_work_dir(work_dir, clean_first):
         print(f"Cleaning work directory: {work_dir}")
         try:
             # Cleaning might require root if the directory was created by a previous root-run
-            command = PRIV_CMD_LIST + ["rm", "-rf", work_dir]
+            command = (PRIV_CMD_LIST if PRIV_CMD_LIST else []) + ["rm", "-rf", work_dir]
             subprocess.run(command, check=True, capture_output=True)
             os.makedirs(work_dir, exist_ok=True)
             return True
@@ -130,9 +131,9 @@ def _run_mkarchiso(project_root, work_dir, output_dir, work_archiso_dir):
     original_cwd = os.getcwd()
     try:
         os.chdir(project_root)
-        mkarchiso_command = PRIV_CMD_LIST + ["mkarchiso", "-v", "-w", work_dir, "-o", output_dir, work_archiso_dir]
+        mkarchiso_command = (PRIV_CMD_LIST if PRIV_CMD_LIST else []) + ["mkarchiso", "-v", "-w", work_dir, "-o", output_dir, work_archiso_dir]
         print(f"Executing command: {' '.join(mkarchiso_command)}")
-        
+
         process = subprocess.Popen(mkarchiso_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         while True:
             if process.stdout:
@@ -140,7 +141,7 @@ def _run_mkarchiso(project_root, work_dir, output_dir, work_archiso_dir):
                 if not line: break
                 print(line.strip())
             else: break
-        
+
         return_code = process.wait()
         if return_code != 0:
             print(f"mkarchiso exited with error code: {return_code}", file=sys.stderr)
@@ -153,7 +154,7 @@ def _run_mkarchiso(project_root, work_dir, output_dir, work_archiso_dir):
         os.chdir(original_cwd)
 
 def _process_output_iso(output_dir):
-    """Finds, renames, and generates checksum for the output ISO."""
+    """Finds the output ISO and generates its checksum."""
     generated_iso_name_pattern = "CrystalLinux-"
     files = sorted(
         [os.path.join(output_dir, f) for f in os.listdir(output_dir) if f.startswith(generated_iso_name_pattern) and f.endswith(".iso")],
@@ -164,35 +165,29 @@ def _process_output_iso(output_dir):
         print(f"Error: Could not find the generated ISO file in {output_dir}", file=sys.stderr)
         return None
 
-    old_iso_path = files[0]
-    new_iso_name = generate_iso_filename()
-    new_iso_path = os.path.join(output_dir, new_iso_name)
-    
-    try:
-        os.rename(old_iso_path, new_iso_path)
-        print(f"Renamed ISO from {os.path.basename(old_iso_path)} to {os.path.basename(new_iso_path)}")
-    except OSError as e:
-        print(f"Error renaming ISO: {e}", file=sys.stderr)
-        return None
-    
-    if os.path.exists(new_iso_path):
-        print(f"Generating SHA256 checksum for {new_iso_path}")
-        checksum = generate_checksum(new_iso_path)
+    # Get the most recently modified ISO file
+    iso_path = files[0]
+    iso_name = os.path.basename(iso_path)
+
+    if os.path.exists(iso_path):
+        print(f"Found generated ISO: {iso_name}")
+        print(f"Generating SHA256 checksum for {iso_name}")
+        checksum = generate_checksum(iso_path)
         if checksum:
-            checksum_file_path = f"{new_iso_path}.sha256"
+            checksum_file_path = f"{iso_path}.sha256"
             try:
                 with open(checksum_file_path, "w") as f:
-                    f.write(f"{checksum}  {os.path.basename(new_iso_path)}\n")
+                    f.write(f"{checksum}  {iso_name}\n")
                 print(f"Checksum saved to {checksum_file_path}")
-            except IOError as e: 
+            except IOError as e:
                 print(f"Error saving checksum file: {e}", file=sys.stderr)
-        else: 
+        else:
             print("Failed to generate checksum.", file=sys.stderr)
     else:
-         print(f"Error: Final ISO file not found at {new_iso_path} for checksumming.", file=sys.stderr)
+         print(f"Error: Generated ISO file not found at {iso_path} for checksumming.", file=sys.stderr)
          return None
-    
-    return new_iso_path
+
+    return iso_path
 
 def _handle_ownership(output_dir):
     """Attempts to change ownership of the output directory to the original user."""
@@ -204,7 +199,7 @@ def _handle_ownership(output_dir):
 
     print(f"Attempting to change ownership of {output_dir} to user '{sudo_user}'...")
     try:
-        command = PRIV_CMD_LIST + ["chown", "-R", sudo_user, output_dir]
+        command = (PRIV_CMD_LIST if PRIV_CMD_LIST else []) + ["chown", "-R", sudo_user, output_dir]
         subprocess.run(command, check=True)
         print("Ownership changed successfully.")
         return True
@@ -224,8 +219,10 @@ def _copy_package_list(work_dir, output_dir, final_iso_path):
     if final_iso_path:
         package_list_dest = os.path.join(output_dir, f"{os.path.splitext(os.path.basename(final_iso_path))[0]}.pkgs.txt")
     else:
+        # Fallback if final_iso_path is None, though _process_output_iso should prevent this.
         package_list_dest = os.path.join(output_dir, "pkglist.x86_64.txt")
-    
+
+
     if os.path.exists(package_list_source):
         print(f"Copying package list to {package_list_dest}")
         try:
@@ -235,20 +232,20 @@ def _copy_package_list(work_dir, output_dir, final_iso_path):
             print(f"Error copying package list: {e}", file=sys.stderr)
     else:
         print(f"Warning: Package list file not found at {package_list_source}", file=sys.stderr)
-    
+
     return None
 
 def main_build():
     """Main function to orchestrate the Crystal Linux ISO build process."""
     args = _parse_args()
-    
+
     setup_result = _setup_paths(args)
     if setup_result is None or not all(setup_result):
         print("Failed to set up paths. Exiting.", file=sys.stderr)
         return
 
     work_dir, output_dir, project_root, archiso_source_dir, work_archiso_dir = setup_result
-    
+
     if not _clean_work_dir(work_dir, args.clean):
         print("Failed to clean work directory. Exiting.", file=sys.stderr)
         return
@@ -257,18 +254,22 @@ def main_build():
         print("Failed to copy archiso profile. Exiting.", file=sys.stderr)
         return
 
-    update_version_file(os.path.join(work_archiso_dir, "airootfs"))
-    
+    if work_archiso_dir:
+        update_version_file(os.path.join(work_archiso_dir, "airootfs"))
+    else:
+        print("work_archiso_dir is None. Skipping update_version_file.", file=sys.stderr)
+        return
+
     if not _run_mkarchiso(project_root, work_dir, output_dir, work_archiso_dir):
         print("mkarchiso build failed. Exiting.", file=sys.stderr)
         return
 
     final_iso_path = _process_output_iso(output_dir)
-    
+
     if final_iso_path:
         _handle_ownership(output_dir)
         package_list_dest = _copy_package_list(work_dir, output_dir, final_iso_path)
-        
+
         print("\nBuild process completed.")
         print(f"Final ISO located at: {final_iso_path}")
         if package_list_dest:

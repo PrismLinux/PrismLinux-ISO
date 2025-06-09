@@ -2,15 +2,14 @@
 # shellcheck disable=SC2034
 
 iso_name="CrystalLinux"
+iso_label="CL_$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y%m)"
 iso_publisher="CrystalNetwork Studio <@CrystalNetwork Studio>"
 iso_application="CrystalLinux Live/Rescue DVD"
-iso_version="$(date +%y.%m)"
+iso_version="$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y.%m.%d)"
 install_dir="arch"
 buildmodes=('iso')
 ## GRUB
-bootmodes=('bios.syslinux.mbr' 'bios.syslinux.eltorito'
-           'uefi-ia32.grub.esp' 'uefi-x64.grub.esp'
-           'uefi-ia32.grub.eltorito' 'uefi-x64.grub.eltorito')
+bootmodes=('bios.syslinux.mbr' 'bios.syslinux.eltorito' 'uefi-x64.grub.esp' 'uefi-x64.grub.eltorito')
 arch="x86_64"
 pacman_conf="pacman.conf"
 airootfs_image_type="squashfs"
