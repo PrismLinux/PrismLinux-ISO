@@ -61,11 +61,13 @@ memtest86+-efi
 mesa
 mkinitcpio
 mkinitcpio-archiso
+mkinitcpio-nfs-utils
 mobile-broadband-provider-info
 modemmanager
 mtools
 nano
 nano-syntax-highlighting
+nbd
 networkmanager
 nfs-utils
 nilfs-utils
