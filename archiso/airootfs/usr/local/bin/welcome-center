@@ -1,0 +1,96 @@
+#!/bin/bash
+
+#=================================================================================
+# CrystalLinux Welcome Center
+#
+# A persistent, stylish, and multilingual welcome screen for the live environment.
+# This version remains open after launching an action.
+#
+# GitLab: https://gitlab.com/crystalnetwork-studio/linux/CrystalLinux/
+#=================================================================================
+
+# --- CONFIGURATION ---
+
+# Main logo.
+APP_ICON="CrystalLinux-logo"
+
+# URLs
+GITLAB_URL="https://gitlab.com/crystalnetwork-studio/linux/CrystalLinux/"
+# WEBSITE_URL="https://crystallinux.org"
+
+# Commands to run
+INSTALLER_CMD="calamares"
+MIRROR_CMD="choose-mirror"
+
+# --- LOCALIZATION (i18n) ---
+WIN_TITLE="Welcome to CrystalLinux"
+WELCOME_HEADER="Welcome to CrystalLinux!"
+WELCOME_TEXT="Please choose one of the options below to get started."
+
+SECTION_ACTIONS_HEADER="Main Actions"
+SECTION_COMMUNITY_HEADER="Community & Resources"
+
+BTN_INSTALL_LABEL="Install System"
+BTN_INSTALL_TOOLTIP="Launch the graphical installer"
+BTN_MIRRORS_LABEL="Update Mirrors"
+BTN_MIRRORS_TOOLTIP="Choose the fastest download servers"
+BTN_GITLAB_LABEL="GitLab Project"
+BTN_GITLAB_TOOLTIP="View source code and contribute"
+BTN_WEBSITE_LABEL="Website"
+BTN_WEBSITE_TOOLTIP="Visit our official website"
+BTN_EXIT_LABEL="Exit"
+BTN_EXIT_TOOLTIP="Close this window"
+
+# --- MAIN PROGRAM LOOP ---
+
+while true; do
+    # Assemble buttons and their tooltips
+    # Format: "TEXT!ICON!TOOLTIP:RETURN_CODE"
+    BUTTONS=(
+        "--button=${BTN_INSTALL_LABEL}!system-installer-symbolic!${BTN_INSTALL_TOOLTIP}:1"
+        "--button=${BTN_MIRRORS_LABEL}!network-workgroup-symbolic!${BTN_MIRRORS_TOOLTIP}:2"
+        "--button=${BTN_GITLAB_LABEL}!gitlab-symbolic!${BTN_GITLAB_TOOLTIP}:3"
+        #"--button=${BTN_WEBSITE_LABEL}!web-browser-symbolic!${BTN_WEBSITE_TOOLTIP}:4" # Uncomment when the website is ready
+        "--button=${BTN_EXIT_LABEL}!window-close-symbolic!${BTN_EXIT_TOOLTIP}:0"
+    )
+
+    # Launch YAD
+    yad --title="$WIN_TITLE" \
+        --window-icon="$APP_ICON" \
+        --image="$APP_ICON:128" \
+        --image-on-top \
+        --width=600 \
+        --text-align=center \
+        --buttons-layout=spread \
+        --no-escape \
+        --text="<span size='xx-large' weight='bold'>$WELCOME_HEADER</span>\n\n$WELCOME_TEXT" \
+        "${BUTTONS[@]}"
+
+    # Get the return code from YAD
+    CHOICE=$?
+
+    # Handle user choice
+    case $CHOICE in
+        1)  # Install System
+            $INSTALLER_CMD &
+            ;;
+        2)  # Update Mirrors
+            $MIRROR_CMD &
+            ;;
+        3)  # Open GitLab
+            xdg-open "$GITLAB_URL" &
+            ;;
+        4)  # Open Website
+            #xdg-open "$WEBSITE_URL" &
+            ;;
+        0 | 252) # 0 = Exit button, 252 = Window close
+            break # Exit the while loop
+            ;;
+        *) # Unknown action (e.g., error)
+            break # Also exit in case of unexpected error
+            ;;
+    esac
+done
+
+echo "CrystalLinux Welcome Center closed."
+exit 0
