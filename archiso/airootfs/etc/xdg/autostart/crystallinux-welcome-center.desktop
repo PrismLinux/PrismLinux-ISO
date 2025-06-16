@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=CrystalLinux Welcome Center
+Comment=Launches the CrystalLinux Welcome Center
+Exec=/usr/local/bin/welcome-center
+Icon=CrystalLinux-logo
+Terminal=false
+Type=Application
+Categories=System;Utility;
+StartupNotify=false
+X-GNOME-Autostart-enabled=true
