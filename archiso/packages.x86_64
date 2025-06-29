@@ -3,6 +3,7 @@
 ## General
 crystallinux-themes-fish
 nvidia-inst
+welcome-center
 
 # BASE
 
@@ -258,9 +259,6 @@ xsettingsd
 
 ## Browser
 librewolf
-
-## System
-meld
 
 ## Fonts
 cantarell-fonts
