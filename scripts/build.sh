@@ -46,6 +46,8 @@ update_version_file() {
     local version_file="${airootfs_path}/etc/crystallinux-version"
     local build_date=$(date +%Y.%m)
 
+    mkdir -p "$(dirname "$version_file")"
+
     if ! echo "$build_date" > "$version_file"; then
         echo "Error writing to version file $version_file" >&2
         return 1
@@ -84,9 +86,6 @@ EOF
 
 # Function to parse command line arguments
 parse_args() {
-    WORK_DIR="../build/work"
-    OUTPUT_DIR="../build/out"
-
     while [[ $# -gt 0 ]]; do
         case $1 in
             --work-dir)
@@ -112,21 +111,33 @@ parse_args() {
                 ;;
         esac
     done
+
+    # Set default paths if not provided
+    local script_dir=$(dirname "$(realpath "$0")")
+    local iso_dir=$(dirname "$script_dir")
+
+    if [[ -z "$WORK_DIR" ]]; then
+        WORK_DIR="${iso_dir}/work/build"
+    fi
+    if [[ -z "$OUTPUT_DIR" ]]; then
+        OUTPUT_DIR="${iso_dir}/work/out"
+    fi
 }
 
 # Function to setup and verify paths
 setup_paths() {
-    WORK_DIR=$(realpath "$WORK_DIR")
-    OUTPUT_DIR=$(realpath "$OUTPUT_DIR")
+    # Create absolute paths
+    WORK_DIR=$(realpath -m "$WORK_DIR")
+    OUTPUT_DIR=$(realpath -m "$OUTPUT_DIR")
 
     local script_dir=$(dirname "$(realpath "$0")")
     local iso_dir=$(dirname "$script_dir")
-    PROJECT_ROOT=$(dirname "$iso_dir")
+    PROJECT_ROOT="$iso_dir"
     ARCHISO_SOURCE_DIR="${iso_dir}/archiso"
     WORK_ARCHISO_DIR="${WORK_DIR}/archiso"
 
     # Create necessary directories
-    mkdir -p "$(dirname "$WORK_DIR")" "$WORK_DIR" "$OUTPUT_DIR"
+    mkdir -p "$WORK_DIR" "$OUTPUT_DIR"
 
     if [[ ! -d "$ARCHISO_SOURCE_DIR" ]]; then
         echo "Error: Archiso source directory not found at $ARCHISO_SOURCE_DIR" >&2
@@ -196,13 +207,23 @@ run_mkarchiso() {
     echo "Starting ISO build in $WORK_ARCHISO_DIR"
     local original_cwd=$(pwd)
 
-    cd "$PROJECT_ROOT"
+    cd "$WORK_ARCHISO_DIR"
+
+    # Set up temporary directories
+    local tmp_dir="${WORK_DIR}/tmp"
+    mkdir -p "${tmp_dir}/pacman"
+    export TMPDIR="$tmp_dir"
+
+    # Create temporary pacman config
+    local pacman_conf="${tmp_dir}/pacman.conf"
+    cp "${WORK_ARCHISO_DIR}/pacman.conf" "$pacman_conf"
+    echo "Options = CacheDir = ${tmp_dir}/pacman/pkg" >> "$pacman_conf"
 
     local mkarchiso_command=()
     if [[ -n "$PRIV_CMD" ]]; then
         mkarchiso_command+=("$PRIV_CMD")
     fi
-    mkarchiso_command+=("mkarchiso" "-v" "-w" "$WORK_DIR" "-o" "$OUTPUT_DIR" "$WORK_ARCHISO_DIR")
+    mkarchiso_command+=("env" "TMPDIR=${tmp_dir}" "mkarchiso" "-v" "-w" "$WORK_DIR" "-o" "$OUTPUT_DIR" "-C" "$pacman_conf" ".")
 
     echo "Executing command: ${mkarchiso_command[*]}"
 
