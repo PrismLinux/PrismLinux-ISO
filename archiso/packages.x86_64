@@ -21,6 +21,7 @@ linux-zen-headers
 nano
 nano-syntax-highlighting
 sudo
+vim
 
 ## Filesystem
 btrfs-progs
@@ -33,7 +34,6 @@ ntfs-3g
 
 ## Boot
 efibootmgr
-efitools
 
 # HARDWARE
 
@@ -43,22 +43,17 @@ intel-ucode
 
 ## X system
 mesa
-mesa-utils
 nvidia-utils
-vulkan-nouveau
 xf86-input-libinput
 xf86-video-amdgpu
-xf86-video-ati
 xorg-server
-xorg-xdpyinfo
 xorg-xinit
-xorg-xinput
 xorg-xkill
 xorg-xrandr
+xorg-xrdb
 
 ## Network hardware
 b43-fwcutter
-broadcom-wl-dkms
 
 ## General hardware
 lsscsi
@@ -67,11 +62,9 @@ smartmontools
 usbutils
 
 ## Audio hardware
-alsa-firmware
-alsa-plugins
 alsa-utils
-pavucontrol
 pipewire-alsa
+pipewire-jack
 pipewire-pulse
 rtkit
 sof-firmware
@@ -81,24 +74,17 @@ wireplumber
 
 ## General system
 dmidecode
-freetype2
 gptfdisk
 hwdetect
 hwinfo
 inxi
-libgsf
-libopenraw
-plocate
 power-profiles-daemon
 rate-mirrors
 rsync
 tuned
-unrar
-unzip
 wget
-xdg-user-dirs
+xdg-user-dirs-gtk
 xdg-utils
-xz
 yad
 
 ## Network
@@ -108,12 +94,7 @@ ethtool
 modemmanager
 nbd
 networkmanager
-networkmanager-openconnect
-networkmanager-openvpn
 nss-mdns
-openconnect
-openvpn
-ppp
 usb_modeswitch
 vpnc
 wireless-regdb
@@ -121,8 +102,6 @@ xl2tpd
 
 ## Bluetooth
 bluedevil
-bluez
-bluez-utils
 
 ## Firewall
 firewalld
@@ -139,52 +118,36 @@ pv
 syslinux
 
 ## Live iso tools
-efitools
 gpart
 gparted
-hdparm
 
 # DESKTOP
 
 ## Desktop environment
 alacritty
 ark
-breeze
 breeze-gtk
 dolphin
-ffmpegthumbs
 gwenview
 kcalc
-kdegraphics-thumbnailers
 kde-gtk-config
-kinfocenter
-kio-admin
-kio-extras
 kscreen
-kwayland-integration
-okular
-plasma-browser-integration
-plasma-firewall
+plasma-desktop
+plasma-integration
 plasma-nm
 plasma-pa
-plasma-systemmonitor
 plasma-workspace
-powerdevil
+plasma-x11-session
 sddm
-sddm-kcm
 spectacle
-xdg-desktop-portal-kde
 xsettingsd
 
 ## Browser
 librewolf
 
 ## Fonts
-cantarell-fonts
 noto-fonts
 noto-fonts-cjk
-noto-fonts-emoji
-noto-fonts-extra
 ttf-bitstream-vera
 ttf-dejavu
 ttf-liberation
