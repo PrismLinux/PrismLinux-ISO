@@ -10,9 +10,6 @@ welcome-center
 ## Base system
 archlinux-keyring
 base
-base-devel
-chaotic-keyring
-chaotic-mirrorlist
 cryptsetup
 device-mapper
 diffutils
@@ -25,20 +22,11 @@ linux-firmware
 linux-firmware-marvell
 linux-zen
 linux-zen-headers
-logrotate
 lsb-release
-man-db
-man-pages
-mdadm
 nano
 nano-syntax-highlighting
 perl
-s-nail
 sudo
-sysfsutils
-systemd-sysvcompat
-texinfo
-vi
 which
 
 ## Filesystem
@@ -47,13 +35,8 @@ dosfstools
 e2fsprogs
 exfatprogs
 f2fs-tools
-jfsutils
-lvm2
 mtools
-nfs-utils
-nilfs-utils
 ntfs-3g
-xfsprogs
 
 ## Boot
 efibootmgr
@@ -112,37 +95,23 @@ wireplumber
 ## General system
 bash-completion
 bat
-dialog
 dmidecode
-dmraid
-downgrade
-duf
 eza
-fakeroot
 fish
 freetype2
-git
-glances
-gpm
 gptfdisk
-haveged
 hwdetect
 hwinfo
 inxi
 libgsf
 libopenraw
-ntp
-pacman-contrib
 pkgfile
 plocate
 poppler-glib
 power-profiles-daemon
-python-packaging
+tuned
 rate-mirrors
-rebuild-detector
-reflector
 rsync
-tldr
 unrar
 unzip
 wget
@@ -155,12 +124,8 @@ yad
 bind
 dnsmasq
 ethtool
-iwd
 modemmanager
 nbd
-ndisc6
-netctl
-net-tools
 networkmanager
 networkmanager-openconnect
 networkmanager-openvpn
@@ -168,14 +133,9 @@ nss-mdns
 openconnect
 openvpn
 ppp
-pptpclient
-rp-pppoe
 usb_modeswitch
 vpnc
-whois
 wireless-regdb
-#wireless_tools
-wpa_supplicant
 xl2tpd
 
 ## Bluetooth
@@ -184,8 +144,6 @@ bluez-utils
 
 ## Firewall
 firewalld
-python-capng
-python-pyqt5
 
 # ISO
 
@@ -199,17 +157,15 @@ pv
 syslinux
 
 ## Live iso tools
-clonezilla
 efitools
-fsarchiver
 gpart
 gparted
 hdparm
-partitionmanager
 
 # DESKTOP
 
 ## Desktop environment
+alacritty
 ark
 bluedevil
 breeze
@@ -217,40 +173,28 @@ breeze-gtk
 dolphin
 dolphin-plugins
 ffmpegthumbs
-fwupd
 gwenview
-haruna
 kate
 kcalc
 kde-cli-tools
-kdeconnect
 kdegraphics-thumbnailers
 kde-gtk-config
-kdenetwork-filesharing
 kdeplasma-addons
-kgamma
-kimageformats
 kinfocenter
 kio-admin
 kio-extras
 kio-fuse
-konsole
 kscreen
 kwallet-pam
 kwayland-integration
-libappindicator-gtk3
-maliit-keyboard
 okular
 plasma-browser-integration
-plasma-desktop
-plasma-disks
 plasma-firewall
 plasma-nm
 plasma-pa
 plasma-systemmonitor
 plasma-workspace
 powerdevil
-print-manager
 sddm
 sddm-kcm
 spectacle
@@ -276,9 +220,6 @@ ttf-opensans
 ## Qemu
 qemu-guest-agent
 
-## Spice
-spice-vdagent
-
 ## Virtual-box
 virtualbox-guest-utils
 
@@ -286,3 +227,8 @@ virtualbox-guest-utils
 open-vm-tools
 xf86-input-vmmouse
 xf86-video-qxl
+
+## Keyring && Mirrors
+archlinuxcn-keyring
+chaotic-keyring
+chaotic-mirrorlist
