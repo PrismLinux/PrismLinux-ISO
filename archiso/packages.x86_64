@@ -11,23 +11,16 @@ welcome-center
 archlinux-keyring
 base
 cryptsetup
-device-mapper
 diffutils
-dracut
 edk2-shell
-inetutils
-iptables-nft
 less
 linux-firmware
 linux-firmware-marvell
 linux-zen
 linux-zen-headers
-lsb-release
 nano
 nano-syntax-highlighting
-perl
 sudo
-which
 
 ## Filesystem
 btrfs-progs
@@ -77,14 +70,8 @@ usbutils
 alsa-firmware
 alsa-plugins
 alsa-utils
-gst-libav
-gst-plugin-pipewire
-gst-plugins-bad
-gst-plugins-ugly
-libdvdcss
 pavucontrol
 pipewire-alsa
-pipewire-jack
 pipewire-pulse
 rtkit
 sof-firmware
@@ -93,11 +80,7 @@ wireplumber
 # SOFTWARE
 
 ## General system
-bash-completion
-bat
 dmidecode
-eza
-fish
 freetype2
 gptfdisk
 hwdetect
@@ -105,13 +88,11 @@ hwinfo
 inxi
 libgsf
 libopenraw
-pkgfile
 plocate
-poppler-glib
 power-profiles-daemon
-tuned
 rate-mirrors
 rsync
+tuned
 unrar
 unzip
 wget
@@ -139,6 +120,7 @@ wireless-regdb
 xl2tpd
 
 ## Bluetooth
+bluedevil
 bluez
 bluez-utils
 
@@ -167,25 +149,18 @@ hdparm
 ## Desktop environment
 alacritty
 ark
-bluedevil
 breeze
 breeze-gtk
 dolphin
-dolphin-plugins
 ffmpegthumbs
 gwenview
-kate
 kcalc
-kde-cli-tools
 kdegraphics-thumbnailers
 kde-gtk-config
-kdeplasma-addons
 kinfocenter
 kio-admin
 kio-extras
-kio-fuse
 kscreen
-kwallet-pam
 kwayland-integration
 okular
 plasma-browser-integration
