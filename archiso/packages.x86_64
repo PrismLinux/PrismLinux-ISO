@@ -115,6 +115,7 @@ bluedevil
 
 ## Live iso specific
 arch-install-scripts
+calamares
 memtest86+
 memtest86+-efi
 mkinitcpio-archiso
