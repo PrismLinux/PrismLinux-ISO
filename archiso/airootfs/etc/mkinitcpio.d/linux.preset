@@ -1,11 +1,4 @@
-#=================================================================================
-# CrystalLinux mkinitcpio preset
-#
 # mkinitcpio preset file for the 'linux' package on archiso
-#
-# GitLab: https://gitlab.com/crystalnetwork-studio/linux/CrystalLinux/
-#=================================================================================
-
 PRESETS=('archiso')
 
 ALL_kver='/boot/vmlinuz-linux-zen'
