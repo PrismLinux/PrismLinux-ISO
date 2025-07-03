@@ -27,5 +27,4 @@ file_permissions=(
   ["/usr/bin/choose-mirror"]="0:0:755"
   ["/usr/bin/configurate-desktop"]="0:0:755"
   ["/usr/bin/intel-legacy-gpu-installer"]="0:0:755"
-  ["/usr/bin/nvidia-modules-installer"]="0:0:755"
 )
