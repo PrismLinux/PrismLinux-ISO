@@ -1,11 +1,6 @@
-NAME="CrystalLinux"
-PRETTY_NAME="CrystalLinux"
-ID=crystallinux
+NAME="PrismLinux"
+PRETTY_NAME="PrismLinux"
+ID=prismlinux
 BUILD_ID=rolling
-ANSI_COLOR="38;2;23;147;209"
-HOME_URL="https://gitlab.com/crystalnetwork-studio/linux/CrystalLinux/os-build/iso-profile"
-DOCUMENTATION_URL="https://gitlab.com/crystalnetwork-studio/linux/CrystalLinux/os-build/iso-profile"
-SUPPORT_URL="https://gitlab.com/crystalnetwork-studio/linux/CrystalLinux/os-build/iso-profileissues"
-BUG_REPORT_URL="https://gitlab.com/crystalnetwork-studio/linux/CrystalLinux/os-build/iso-profile/issues"
-PRIVACY_POLICY_URL="https://gitlab.com/crystalnetwork-studio/linux/CrystalLinux/CrystalLinux-ISO"
-LOGO=crystallinux-logo
+ANSI_COLOR="38;2;30;144;255"
+LOGO=prismlinux-logo

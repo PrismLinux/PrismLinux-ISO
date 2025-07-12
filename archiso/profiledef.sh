@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 
-iso_name="CrystalLinux"
+iso_name="PrismLinux"
 iso_label="CL_$(date +%Y%m)"
 iso_publisher="CrystalNetwork Studio <@CrystalNetwork Studio>"
-iso_application="CrystalLinux Live/Rescue DVD"
+iso_application="PrismLinux Live/Rescue DVD"
 iso_version="$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y.%m.%d)"
 install_dir="arch"
 buildmodes=('iso')

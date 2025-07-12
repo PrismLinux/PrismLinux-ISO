@@ -37,13 +37,13 @@ get_privilege_command() {
 generate_iso_filename() {
     local build_date=$(date +%Y%m%d)
     local arch="x86_64"
-    echo "CrystalLinux-${build_date}-${arch}.iso"
+    echo "PrismLinux-${build_date}-${arch}.iso"
 }
 
 # Function to update version file
 update_version_file() {
     local airootfs_path="$1"
-    local version_file="${airootfs_path}/etc/crystallinux-version"
+    local version_file="${airootfs_path}/etc/prismLinux-version"
     local build_date=$(date +%Y.%m)
 
     mkdir -p "$(dirname "$version_file")"
@@ -73,7 +73,7 @@ show_usage() {
     cat << EOF
 Usage: $0 [OPTIONS]
 
-Build Crystal Linux ISO.
+Build PrismLinux ISO.
 
 OPTIONS:
     --work-dir DIR      Working directory for the build (default: ../build/work)
@@ -239,7 +239,7 @@ run_mkarchiso() {
 
 # Function to process output ISO
 process_output_iso() {
-    local generated_iso_name_pattern="CrystalLinux-"
+    local generated_iso_name_pattern="PrismLinux-"
     local iso_path=""
 
     # Find the most recent ISO file

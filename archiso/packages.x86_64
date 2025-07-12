@@ -1,8 +1,10 @@
-# CrystalLinux REPO
+# PrismLinux REPO
 
 ## General
-crystallinux-themes-fish
 about
+prismlinux-themes-fish
+crystallize-cli
+crystallize-gui
 
 # BASE
 
@@ -91,7 +93,6 @@ tuned-ppd
 wget
 xdg-user-dirs-gtk
 xdg-utils
-yad
 
 ## Network
 bind
@@ -115,7 +116,6 @@ bluedevil
 
 ## Live iso specific
 arch-install-scripts
-calamares
 memtest86+
 memtest86+-efi
 mkinitcpio-archiso
@@ -174,7 +174,6 @@ open-vm-tools
 vulkan-virtio
 xf86-input-vmmouse
 xf86-video-qxl
-xf86-video-vmware
 
 ## Keyring && Mirrors
 archlinuxcn-keyring
