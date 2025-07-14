@@ -87,7 +87,7 @@ gptfdisk
 hwdetect
 hwinfo
 inxi
-rate-mirrors
+reflector
 rsync
 tuned
 tuned-ppd
