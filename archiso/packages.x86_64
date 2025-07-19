@@ -19,7 +19,6 @@ diffutils
 edk2-shell
 less
 linux-firmware
-linux-firmware-marvell
 linux-zen
 nano
 nano-syntax-highlighting
@@ -34,11 +33,11 @@ f2fs-tools
 mtools
 ntfs-3g
 squashfs-tools
-zfs-utils
 
 ## Boot
 efibootmgr
 os-prober
+refind
 
 # HARDWARE
 
@@ -83,14 +82,10 @@ wireplumber
 ## General system
 dmidecode
 gptfdisk
-hwdetect
-hwinfo
 inxi
 reflector
 rsync
 wget
-xdg-user-dirs-gtk
-xdg-utils
 
 ## Network
 bind
@@ -99,7 +94,6 @@ ethtool
 modemmanager
 nbd
 networkmanager
-nss-mdns
 rp-pppoe
 usb_modeswitch
 vpnc
@@ -123,7 +117,6 @@ syslinux
 
 ## Live iso tools
 gpart
-gparted
 testdisk
 
 # DESKTOP
