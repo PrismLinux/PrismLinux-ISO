@@ -133,8 +133,8 @@ setup_paths() {
     local script_dir=$(dirname "$(realpath "$0")")
     local iso_dir=$(dirname "$script_dir")
     PROJECT_ROOT="$iso_dir"
-    ARCHISO_SOURCE_DIR="${iso_dir}/archiso"
-    WORK_ARCHISO_DIR="${WORK_DIR}/archiso"
+    ARCHISO_SOURCE_DIR="${iso_dir}/prismlinux"
+    WORK_ARCHISO_DIR="${WORK_DIR}/prismlinux"
 
     # Create necessary directories
     mkdir -p "$WORK_DIR" "$OUTPUT_DIR"
