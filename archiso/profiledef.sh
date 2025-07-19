@@ -3,10 +3,10 @@
 
 iso_name="PrismLinux"
 iso_label="PL_$(date +%Y%m)"
-iso_publisher="CrystalNetwork Studio <@CrystalNetwork Studio>"
+iso_publisher="CrystalNetwork Studio"
 iso_application="PrismLinux Live/Rescue DVD"
 iso_version="$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y.%m.%d)"
-install_dir="arch"
+install_dir="prismlinux"
 buildmodes=('iso')
 quiet="n"
 work_dir="work"
