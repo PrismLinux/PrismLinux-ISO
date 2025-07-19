@@ -1,0 +1,19 @@
+theme = "catppuccin-mocha"
+hide-mouse-cursor-when-typing = true
+confirm-before-quit = false
+
+[fonts]
+size = 16
+family = "Maple Mono"
+
+[editor]
+program = "hx"
+args = []
+
+[cursor]
+shape = "block"
+blinkig = false
+
+[window]
+opacity = 1
+blur = true

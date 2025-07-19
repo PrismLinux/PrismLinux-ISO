@@ -2,10 +2,12 @@
 
 ## General
 about
-prismlinux-mirrorlist
-prismlinux-themes-fish
 crystallize-cli
 crystallize-gui
+prismlinux/grub
+prismlinux-hooks
+prismlinux-mirrorlist
+prismlinux-themes-fish
 
 # BASE
 
@@ -22,7 +24,6 @@ linux-zen
 nano
 nano-syntax-highlighting
 sudo
-vim
 
 ## Filesystem
 btrfs-progs
@@ -37,9 +38,7 @@ zfs-utils
 
 ## Boot
 efibootmgr
-grub
 os-prober
-refind
 
 # HARDWARE
 
@@ -89,8 +88,6 @@ hwinfo
 inxi
 reflector
 rsync
-tuned
-tuned-ppd
 wget
 xdg-user-dirs-gtk
 xdg-utils
@@ -132,7 +129,7 @@ testdisk
 # DESKTOP
 
 ## Desktop environment
-alacritty
+rio
 ark
 breeze-gtk
 dolphin
