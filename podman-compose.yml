@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  archiso-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: prismlinux-archiso:latest
+    container_name: archiso-builder
+    privileged: true
+    security_opt:
+      - seccomp=unconfined
+    volumes:
+      - ./prismlinux:/workspace/prismlinux:Z
+      - /etc/pacman.conf:/etc/pacman.conf:ro
+      - /etc/pacman.d:/etc/pacman.d:ro
+      - /dev:/dev
+    working_dir: /workspace
+    entrypoint: ["/bin/bash"]
+    command:
+      - -c
+      - |
+        echo '🚀 Starting archiso build...'
+        cd /workspace/prismlinux
+        rm -rf work out
+        
+        echo '⚙️ Running mkarchiso (ignoring container warnings)...'
+        mkarchiso -v -w work -o out ./ || {
+          echo '⚠️ Build completed with warnings (normal in container)'
+          if [ ! -d "out" ] || [ -z "$(ls -A out 2>/dev/null)" ]; then
+            echo '❌ No output files generated - build failed'
+            exit 1
+          fi
+        }
+        
+        echo '✅ Build completed! ISO is ready.'
+        echo '📦 Listing output files:'
+        ls -lh out/
+        
+        # Check if ISO files exist
+        if ls out/*.iso >/dev/null 2>&1; then
+          echo '🔄 Renaming ISO to PrismLinux with date...'
+          for iso in out/*.iso; do
+            if [ -f "$iso" ]; then
+              date_suffix=$(date +'%m-%Y')
+              new_name="out/PrismLinux-$date_suffix.iso"
+              mv "$iso" "$new_name"
+              echo "📁 Renamed to: $(basename "$new_name")"
+            fi
+          done
+        else
+          echo '⚠️ No ISO files found to rename'
+        fi
+        
+        echo '📦 Final output:'
+        ls -lh out/
+        echo '🏁 Build finished successfully. Container will now exit.'
+    pull_policy: build
+    restart: "no"

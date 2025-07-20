@@ -1,0 +1,27 @@
+# Ignore build and output directories
+work/
+out/
+iso-output/
+
+# Git files
+.git/
+.gitignore
+
+# Temporary files
+*.tmp
+*.log
+*~
+
+# Documentation
+*.md
+README*
+
+# IDE files
+.vscode/
+.idea/
+.zed/
+.helix/
+
+# Backup files
+*.bak
+*.backup
