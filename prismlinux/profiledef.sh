@@ -20,8 +20,6 @@ airootfs_image_tool_options=('-comp' 'xz' '-Xbcj' 'x86' '-b' '1M' '-Xdict-size' 
 file_permissions=(
   ["/etc/shadow"]="0:0:400"
   ["/etc/gshadow"]="0:0:400"
-  ["/root"]="0:0:750"
-  ["/root/.automated_script.sh"]="0:0:755"
   ["/usr/bin/configurate-desktop"]="0:0:755"
   ["/usr/bin/intel-legacy-gpu-installer"]="0:0:755"
 )

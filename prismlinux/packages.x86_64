@@ -1,144 +1,128 @@
-##### Base packages
-alsa-utils
-amd-ucode
-archinstall
-arch-install-scripts
-b43-fwcutter
+# PrismLinux REPO
+
+## General
+about
+crystallize-cli
+crystallize-gui
+prismlinux/grub
+prismlinux-hooks
+prismlinux-mirrorlist
+prismlinux-themes-fish
+
+# BASE
+
+## Base system
+archlinux-keyring
 base
-bash
-bcachefs-tools
-bind
-bolt
-brltty
-broadcom-wl
-btrfs-progs
-clonezilla
-cloud-init
 cryptsetup
-darkhttpd
-ddrescue
-dhclient
-dhcpcd
 diffutils
-dmidecode
-dmraid
-dnsmasq
-dosfstools
-e2fsprogs
 edk2-shell
-efibootmgr
-espeakup
-ethtool
-exfatprogs
-f2fs-tools
-fakeroot
-fatresize
-fsarchiver
-gpart
-gpm
-gptfdisk
-grml-zsh-config
-hdparm
-hyperv
-intel-ucode
-irssi
-iw
-iwd
-jfsutils
-ldns
 less
-lftp
-libfido2
-libusb-compat
 linux-firmware
 linux-zen
-lsscsi
-lvm2
-lynx
-man-db
-man-pages
-mc
-mdadm
-memtest86+
-memtest86+-efi
-mkinitcpio
-mkinitcpio-archiso
-mkinitcpio-nfs-utils
-modemmanager
-mtools
 nano
 nano-syntax-highlighting
-nbd
-ndisc6
-nfs-utils
-nilfs-utils
-nmap
+sudo
+
+## Filesystem
+btrfs-progs
+dosfstools
+e2fsprogs
+exfatprogs
+f2fs-tools
+mtools
 ntfs-3g
-ntp
-nvme-cli
-openconnect
-open-iscsi
-openpgp-card-tools
-openssh
-open-vm-tools
-openvpn
+squashfs-tools
+
+## Boot
+efibootmgr
 os-prober
-partclone
-parted
-partimage
-pcsclite
-ppp
-pptpclient
-pv
-qemu-guest-agent
 refind
-reflector
-rp-pppoe
-rsync
-rxvt-unicode-terminfo
+
+# HARDWARE
+
+## CPU
+amd-ucode
+intel-ucode
+
+## X system
+mesa
+nvidia-utils
+xf86-input-evdev
+xf86-input-libinput
+xf86-input-synaptics
+xf86-video-amdgpu
+xf86-video-fbdev
+xf86-video-nouveau
+xorg-server
+xorg-xinit
+xorg-xkill
+xorg-xrandr
+xorg-xrdb
+
+## General hardware
+lsscsi
 sdparm
-sequoia-sq
 sg3_utils
 smartmontools
-sof-firmware
-squashfs-tools
-sudo
-syslinux
-systemd-resolvconf
-tcpdump
-testdisk
-tmux
-tpm2-tools
 tpm2-tss
-udftools
-usb_modeswitch
-usbmuxd
 usbutils
+
+## Audio hardware
+alsa-utils
+pipewire-pulse
+rtkit
+sof-firmware
+wireplumber
+
+# SOFTWARE
+
+## General system
+dmidecode
+gptfdisk
+inxi
+reflector
+rsync
+wget
+
+## Network
+bind
+dnsmasq
+ethtool
+modemmanager
+nbd
+networkmanager
+rp-pppoe
+usb_modeswitch
 vpnc
 wireless-regdb
-wireless_tools
 wpa_supplicant
-wvdial
-xfsprogs
 xl2tpd
-zsh
 
-##### System Utilities
-fastfetch
-gnome-packagekit
-inxi
-librewolf
-networkmanager
-packagekit
-packagekit-qt6
-pipewire-pulse
-qt6-multimedia
-sddm
-virt-what
-
-##### KDE packages
-ark
+## Bluetooth
 bluedevil
+
+# ISO
+
+## Live iso specific
+arch-install-scripts
+memtest86+
+memtest86+-efi
+mkinitcpio-archiso
+mkinitcpio-nfs-utils
+pv
+syslinux
+
+## Live iso tools
+gparted
+gpart
+testdisk
+
+# DESKTOP
+
+## Desktop environment
+rio
+ark
 breeze-gtk
 dolphin
 gwenview
@@ -151,36 +135,37 @@ plasma-nm
 plasma-pa
 plasma-workspace
 plasma-x11-session
-rio
+rxvt-unicode-terminfo
 sddm
+spectacle
 xsettingsd
 
-##### Installer
-crystallize-cli
-crystallize-gui
+## Browser
+librewolf
 
-##### PrismLinux packages
-about
-prismlinux/grub
-prismlinux-hooks
-prismlinux-mirrorlist
-prismlinux-themes-fish
+## Fonts
+noto-fonts
+noto-fonts-cjk
+ttf-bitstream-vera
+ttf-dejavu
+ttf-liberation
+ttf-opensans
 
-prismlinux/grub
+# VM SUPPORT
 
-#### X system
-mesa
-nvidia-utils
-xf86-input-evdev
-xf86-input-libinput
-xf86-input-synaptics
-xf86-video-amdgpu
-xf86-video-fbdev
-xf86-video-nouveau
+## Qemu
+qemu-guest-agent
 
-xf86-video-vesa
+## Virtual-box
+virtualbox-guest-utils
 
-#### Keyring && Mirrors
+## VMware
+open-vm-tools
+vulkan-virtio
+xf86-input-vmmouse
+xf86-video-qxl
+
+## Keyring && Mirrors
 archlinuxcn-keyring
 chaotic-keyring
 chaotic-mirrorlist
