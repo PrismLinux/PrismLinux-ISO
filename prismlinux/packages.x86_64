@@ -81,7 +81,7 @@ wireplumber
 dmidecode
 gptfdisk
 inxi
-reflector
+rate-mirrors
 rsync
 wget
 
