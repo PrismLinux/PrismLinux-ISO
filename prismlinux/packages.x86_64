@@ -4,9 +4,8 @@
 about
 crystallize-cli
 crystallize-gui
+prismlinux
 prismlinux/grub
-prismlinux-hooks
-prismlinux-mirrorlist
 prismlinux-themes-fish
 
 # BASE
