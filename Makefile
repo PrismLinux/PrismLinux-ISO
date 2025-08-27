@@ -98,7 +98,7 @@ iso: $(OUTPUT_DIR) | $(PROFILE_SRC_DIR)/packages.x86_64
 			mv "$$ORIGINAL_ISO" "$(ISO_PATH)"; \
 		fi; \
 		echo "--> Generating checksum for $(ISO_NAME)"; \
-		sha256sum "$(ISO_PATH)" > "$(ISO_PATH).sha256"; \
+		(cd "$(OUTPUT_DIR)" && sha256sum "$(ISO_NAME)") > "$(ISO_PATH).sha256"; \
 		echo "--> Copying final package list from build directory"; \
 		cp "$(FINAL_PACKAGES_FILE)" "$(OUTPUT_DIR)/packages.x86_64"; \
 		if [ -n "$${SUDO_USER}" ]; then \
