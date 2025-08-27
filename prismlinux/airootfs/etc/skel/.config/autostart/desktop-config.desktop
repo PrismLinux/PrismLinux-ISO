@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Application
-Exec=/usr/bin/configurate-desktop
-Hidden=false
-NoDisplay=false
-X-GNOME-Autostart-enabled=true
-Name=Configurate Desktop

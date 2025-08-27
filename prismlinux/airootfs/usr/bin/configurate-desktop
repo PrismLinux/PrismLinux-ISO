@@ -1,5 +1,0 @@
-#!/usr/bin/bash
-
-plasma-apply-lookandfeel -a org.kde.breezedark.desktop
-
-plasma-apply-wallpaperimage /etc/skel/Pictures/wallpaper.webp
