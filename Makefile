@@ -52,7 +52,7 @@ PROFILES       := $(notdir $(patsubst %/,%,$(dir $(wildcard $(PROFILES_DIR)/*/pa
 #
 # ==============================================================================
 
-.PHONY: all build clean distclean iso help debug format
+.PHONY: all build clean distclean iso help debug format clean-profile
 .PHONY: $(PROFILES) # Create a phony target for each profile
 
 # ==============================================================================
@@ -86,34 +86,57 @@ $(PROFILES):
 iso: $(OUTPUT_DIR) | $(PROFILE_SRC_DIR)/packages.x86_64
 	@echo "==> Building ISO for profile: $(PROFILE)"
 	@cd $(WORK_DIR)/$(PROFILE) && \
-		$(PRIV_CMD) env TMPDIR=$(TMP_DIR) $(MKARCHISO) -v -w $(WORK_DIR) -o $(OUTPUT_DIR) . > $(LOG_FILE) 2>&1
+		if $(PRIV_CMD) env TMPDIR=$(TMP_DIR) $(MKARCHISO) -v -w $(WORK_DIR) -o $(OUTPUT_DIR) . 2>&1 | tee $(LOG_FILE); then \
+			echo "==> mkarchiso completed successfully"; \
+		else \
+			echo "==> ERROR: mkarchiso failed! Checking for common issues..."; \
+			if grep -q "could not be read: No such file or directory" $(LOG_FILE); then \
+				echo "==> DETECTED: Missing configuration files"; \
+				echo "==> Cleaning build directory and restarting..."; \
+				$(MAKE) clean-profile PROFILE=$(PROFILE); \
+				echo "==> Retrying build after cleanup..."; \
+				$(MAKE) iso PROFILE=$(PROFILE); \
+				exit 0; \
+			elif grep -q "error:" $(LOG_FILE); then \
+				echo "==> Build failed with errors. Check the log above."; \
+				echo "==> Cleaning build directory for next attempt..."; \
+				$(MAKE) clean-profile PROFILE=$(PROFILE); \
+			fi; \
+			exit 1; \
+		fi
 	@echo "==> Post-processing ISO for profile: $(PROFILE)"
 	@# This entire block is run with elevated privileges to avoid permission errors
 	@# after mkarchiso creates the output directory as root.
 	@$(PRIV_CMD) sh -c ' \
 		set -e; \
-		ORIGINAL_ISO=$$(find "$(OUTPUT_DIR)" -name "*.iso" -type f -newer "$(LOG_FILE)" | head -n 1); \
-		if [ -n "$$ORIGINAL_ISO" ]; then \
-			echo "--> Renaming ISO: $$(basename $$ORIGINAL_ISO) -> $(ISO_NAME)"; \
-			mv "$$ORIGINAL_ISO" "$(ISO_PATH)"; \
-		fi; \
-		echo "--> Generating checksum for $(ISO_NAME)"; \
-		(cd "$(OUTPUT_DIR)" && sha256sum "$(ISO_NAME)") > "$(ISO_PATH).sha256"; \
-		echo "--> Copying final package list from build directory"; \
-		cp "$(FINAL_PACKAGES_FILE)" "$(OUTPUT_DIR)/packages.x86_64"; \
-		if [ -n "$${SUDO_USER}" ]; then \
-			echo "--> Setting ownership for $${SUDO_USER}"; \
-			chown -R "$${SUDO_USER}:$$(id -g -n $$SUDO_USER)" "$(OUTPUT_DIR)"; \
+		ORIGINAL_ISO=$(find "$(OUTPUT_DIR)" -name "*.iso" -type f -newer "$(LOG_FILE)" | head -n 1); \
+		if [ -n "$ORIGINAL_ISO" ]; then \
+			echo "--> Renaming ISO: $(basename $ORIGINAL_ISO) -> $(ISO_NAME)"; \
+			mv "$ORIGINAL_ISO" "$(ISO_PATH)"; \
+			echo "--> Generating checksum for $(ISO_NAME)"; \
+			(cd "$(OUTPUT_DIR)" && sha256sum "$(ISO_NAME)") > "$(ISO_PATH).sha256"; \
+			echo "--> Copying final package list from build directory"; \
+			cp "$(FINAL_PACKAGES_FILE)" "$(OUTPUT_DIR)/packages.x86_64"; \
+			if [ -n "${SUDO_USER}" ]; then \
+				echo "--> Setting ownership for ${SUDO_USER}"; \
+				chown -R "${SUDO_USER}:$(id -g -n $SUDO_USER)" "$(OUTPUT_DIR)"; \
+			fi; \
+			echo "==> Build complete: $(ISO_PATH)"; \
+		else \
+			echo "==> ERROR: No ISO file was created. Build failed."; \
+			exit 1; \
 		fi \
 	'
-	@echo "==> Build complete: $(ISO_PATH)"
 
 # --- Cleanup Targets ---
-# 'clean' removes build artifacts for all profiles.
-# 'distclean' is a more thorough cleanup, as per GNU standards.
 clean:
 	@echo "==> Cleaning all build artifacts."
 	@$(PRIV_CMD) rm -rf $(BUILD_DIR)
+
+# Clean only the specific profile's build directory
+clean-profile:
+	@echo "==> Cleaning build artifacts for profile: $(PROFILE)"
+	@$(PRIV_CMD) rm -rf $(PROFILE_BUILD_DIR)
 
 distclean: clean
 
