@@ -1,3 +1,0 @@
-#!/usr/bin/bash
-
-plasma-apply-wallpaperimage /etc/skel/Pictures/wallpaper.webp
