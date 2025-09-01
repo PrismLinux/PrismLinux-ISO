@@ -33,6 +33,7 @@ f2fs-tools
 mtools
 ntfs-3g
 squashfs-tools
+xfsprogs
 
 ## Boot
 efibootmgr
