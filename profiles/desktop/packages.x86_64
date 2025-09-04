@@ -11,7 +11,6 @@ prismlinux/grub
 # BASE
 
 ## Base system
-archlinux-keyring
 base
 cryptsetup
 diffutils
@@ -47,7 +46,7 @@ amd-ucode
 intel-ucode
 
 ## X system
-mesa
+mesa-tkg-git
 nvidia-utils
 xf86-input-elographics
 xf86-input-evdev
@@ -85,7 +84,6 @@ wireplumber
 ## General system
 dmidecode
 gptfdisk
-inxi
 rate-mirrors
 rsync
 wget
@@ -119,8 +117,8 @@ pv
 syslinux
 
 ## Live iso tools
-gpart
 gparted
+parted
 testdisk
 
 # DESKTOP
@@ -169,6 +167,8 @@ xf86-input-vmmouse
 xf86-video-qxl
 
 ## Keyring && Mirrors
+archlinux-keyring
 archlinuxcn-keyring
+archlinuxcn-mirrorlist
 chaotic-keyring
 chaotic-mirrorlist
