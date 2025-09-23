@@ -29,6 +29,7 @@ bluedevil
 gparted
 
 # DESKTOP ENVIRONMENT (Plasma X11)
+sddm
 breeze-gtk
 dolphin
 gwenview
