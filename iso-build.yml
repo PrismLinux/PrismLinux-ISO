@@ -1,0 +1,33 @@
+# Reusable definitions and anchors
+definitions:
+  post_build: &shared_post_build
+    post-build:
+      sha256sum: true
+      pkglist: true
+      gpgsign:
+        sign: false
+        key: "your-gpg-key-id"
+
+# Profile definitions
+profiles:
+  minimal:
+    name: PrismLinux Minimal
+    description: >
+      A minimal profile with essential packages and configurations for a lightweight system or CLI installer.
+    version: "1.0"
+    scripts: []
+    <<: *shared_post_build
+
+  desktop:
+    name: PrismLinux Desktop
+    description: >
+      A full-featured desktop environment with a variety of applications for everyday use.
+    version: "%Y.%m.%d"
+    parent: minimal
+    scripts:
+      - packages.sh
+    <<: *shared_post_build
+
+# General configuration for the build tool
+config:
+  debug: false

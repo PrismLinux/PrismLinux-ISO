@@ -1,0 +1,108 @@
+# PrismLinux REPO
+crystallize-cli
+prismlinux
+prismlinux-themes-fish
+prismlinux/grub
+
+# BASE SYSTEM
+base
+cryptsetup
+diffutils
+dkms
+edk2-shell
+less
+linux-cachyos-lts
+linux-firmware
+linux-firmware-marvell
+mkinitcpio
+nano
+nano-syntax-highlighting
+sudo
+
+# FILESYSTEM
+btrfs-progs
+dosfstools
+e2fsprogs
+exfatprogs
+f2fs-tools
+mtools
+ntfs-3g
+squashfs-tools
+xfsprogs
+
+# BOOT
+efibootmgr
+os-prober
+refind
+
+# HARDWARE
+## CPU
+amd-ucode
+intel-ucode
+
+## Graphics (Mesa Only)
+mesa-tkg-git
+lib32-mesa-tkg-git
+
+## General hardware
+lsscsi
+sdparm
+sg3_utils
+smartmontools
+tpm2-tss
+usbutils
+
+# SOFTWARE
+## General system
+dmidecode
+gptfdisk
+rate-mirrors
+rsync
+wget
+
+## Network
+bind
+dnsmasq
+ethtool
+iptables
+modemmanager
+nbd
+networkmanager
+usb_modeswitch
+vpnc
+wireless-regdb
+wpa_supplicant
+xl2tpd
+
+# ISO SPECIFIC
+## Live iso tools
+arch-install-scripts
+memtest86+
+memtest86+-efi
+mkinitcpio-archiso
+mkinitcpio-nfs-utils
+parted
+pv
+syslinux
+testdisk
+
+# FONTS
+noto-fonts
+noto-fonts-cjk
+terminus-font
+ttf-bitstream-vera
+ttf-dejavu
+ttf-liberation
+ttf-opensans
+
+# VM GUEST SUPPORT
+qemu-guest-agent
+virtualbox-guest-utils
+open-vm-tools
+
+# KEYRING & MIRRORS
+archlinux-keyring
+archlinuxcn-keyring
+archlinuxcn-mirrorlist-git
+chaotic-keyring
+chaotic-mirrorlist

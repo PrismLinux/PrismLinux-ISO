@@ -1,0 +1,294 @@
+#!/usr/bin/env bash
+
+# Intel Legacy GPU Detection and Configuration Script for PrismLinux
+# Detects old Intel GPUs (Gen 1-3) and installs xf86-video-intel driver
+
+set -euo pipefail
+
+# Logging function
+log() {
+    echo "[intel-legacy-gpu] $*" >&2
+}
+
+# Check if nomodeset is set in kernel parameters
+if grep -q "nomodeset" /proc/cmdline; then
+    log "nomodeset detected in kernel parameters - skipping Intel legacy GPU detection"
+    exit 0
+fi
+
+# Check if Intel modules are blacklisted
+if grep -q "module_blacklist=i915" /proc/cmdline ||
+   grep -q "modprobe.blacklist=i915" /proc/cmdline ||
+   grep -q "module_blacklist=intel" /proc/cmdline ||
+   grep -q "modprobe.blacklist=intel" /proc/cmdline; then
+    log "Intel modules blacklisted in kernel parameters - skipping Intel legacy GPU detection"
+    exit 0
+fi
+
+# Function to check if Intel GPU is from generations 1-4 (extended for better compatibility)
+is_intel_legacy_gpu() {
+    local id="$1"
+
+    # Convert ID to uppercase for case-insensitive matching
+    id=$(echo "$id" | tr '[:lower:]' '[:upper:]')
+
+    # Intel GPU device IDs for legacy generations
+    # Sources: Intel developer documentation, Mesa source code, xf86-video-intel compatibility lists
+
+    # Generation 1 (i810, i815) - Very old, rarely seen
+    local gen1_ids=(
+        7800 1240 7121 7123 7125 1132
+    )
+
+    # Generation 2 (i830, i845, i855, i865) - Early 2000s
+    local gen2_ids=(
+        2562 3577 2572 3582 358E 2582
+        258A 2592 2772 27A2 27AE
+    )
+
+    # Generation 3 (i915, i945) - Mid 2000s, still problematic with modern drivers
+    local gen3_ids=(
+        2582 258A 2592 2772 27A2 27AE
+        29D2 29B2 29C2 A001 A011 2972
+        2973 2982 2983 2992 2993 29A2
+        29A3 2A02 2A03 2A12 2A13
+    )
+
+    # Generation 4 (i965) - Some variants benefit from xf86-video-intel
+    local gen4_problematic_ids=(
+        2972 2973 2982 2983 2992 2993
+        29A2 29A3 2A02 2A03 2A12 2A13
+        2A42 2A43 2E02 2E03 2E12 2E13
+        2E22 2E23 2E32 2E33 2E42 2E43
+    )
+
+    # Check all legacy generations
+    local all_legacy_ids=("${gen1_ids[@]}" "${gen2_ids[@]}" "${gen3_ids[@]}" "${gen4_problematic_ids[@]}")
+
+    for known_id in "${all_legacy_ids[@]}"; do
+        if [[ "$id" == "$known_id" ]]; then
+            return 0  # Match found
+        fi
+    done
+
+    return 1  # No match
+}
+
+# Function to get Intel GPU generation info
+get_intel_gpu_info() {
+    local device_id="$1"
+    local gpu_info
+
+    # Try to get more detailed GPU information
+    gpu_info=$(lspci -nn | grep -i "VGA\|Display\|3D" | grep -i "Intel" | grep -i "$device_id" || true)
+
+    if [[ -n "$gpu_info" ]]; then
+        log "Intel GPU details: $gpu_info"
+    fi
+
+    # Provide generation info based on device ID ranges
+    case "${device_id:0:2}" in
+        "78"|"12"|"71") echo "Generation 1" ;;
+        "25"|"35"|"27") echo "Generation 2" ;;
+        "29"|"2A"|"A0") echo "Generation 3" ;;
+        "2E") echo "Generation 4" ;;
+        *) echo "Unknown generation" ;;
+    esac
+}
+
+# Function to install Intel legacy driver packages
+install_intel_legacy_packages() {
+    local packages_dir="/opt/intel/legacy"
+
+    if [[ ! -d "$packages_dir" ]]; then
+        log "Intel legacy packages directory not found: $packages_dir"
+        return 1
+    fi
+
+    # Check if packages exist
+    local package_files=("$packages_dir"/*.pkg.tar.zst)
+    if [[ ! -f "${package_files[0]}" ]]; then
+        log "No Intel legacy packages found in $packages_dir"
+        return 1
+    fi
+
+    log "Installing Intel legacy driver packages from $packages_dir..."
+
+    # List what we're about to install
+    log "Packages to install:"
+    for pkg in "$packages_dir"/*.pkg.tar.zst; do
+        log "  $(basename "$pkg")"
+    done
+
+    # Install packages
+    if pacman -U --noconfirm --needed "$packages_dir"/*.pkg.tar.zst; then
+        log "Successfully installed Intel legacy driver packages"
+        return 0
+    else
+        log "Failed to install Intel legacy driver packages"
+        return 1
+    fi
+}
+
+# Function to configure system for Intel legacy GPU
+configure_intel_legacy() {
+    local device_id="$1"
+    local generation="$2"
+
+    log "Configuring system for Intel legacy GPU ($generation)"
+
+    # Create X11 configuration for Intel driver
+    local xorg_conf_dir="/etc/X11/xorg.conf.d"
+    local intel_conf="$xorg_conf_dir/20-intel-legacy.conf"
+
+    mkdir -p "$xorg_conf_dir"
+
+    cat > "$intel_conf" << 'EOF'
+Section "Device"
+    Identifier "Intel Graphics"
+    Driver "intel"
+    Option "AccelMethod" "sna"
+    Option "TearFree" "true"
+    Option "DRI" "2"
+    Option "Backlight" "intel_backlight"
+EndSection
+EOF
+
+    log "Created X11 configuration: $intel_conf"
+
+    # Configure KDE compositor settings for legacy Intel
+    local live_user_home="/home/liveuser"
+    local kwin_config="$live_user_home/.config/kwinrc"
+    local skel_kwin_config="/etc/skel/.config/intel-kwinrc"
+
+    if [[ -f "$skel_kwin_config" ]] && [[ -d "$live_user_home" ]]; then
+        log "Configuring KDE compositor for Intel legacy GPU"
+
+        # Ensure .config directory exists
+        mkdir -p "$live_user_home/.config"
+
+        # Copy and configure KWin settings
+        cp "$skel_kwin_config" "$kwin_config"
+        chown liveuser:liveuser "$kwin_config" 2>/dev/null || true
+
+        log "Applied KDE configuration for legacy Intel GPU"
+    fi
+
+    # Set environment variables for better compatibility
+    local env_file="/etc/environment.d/50-intel-legacy.conf"
+    mkdir -p "$(dirname "$env_file")"
+
+    cat > "$env_file" << 'EOF'
+# Intel legacy GPU optimizations
+LIBGL_ALWAYS_SOFTWARE=0
+INTEL_DEBUG=norbc
+MESA_LOADER_DRIVER_OVERRIDE=i965
+EOF
+
+    log "Created environment configuration: $env_file"
+
+    # Create modprobe configuration to ensure proper module loading
+    local modprobe_conf="/etc/modprobe.d/intel-legacy.conf"
+
+    cat > "$modprobe_conf" << 'EOF'
+# Intel legacy GPU module configuration
+options i915 modeset=1
+options i915 enable_rc6=1
+options i915 enable_fbc=1
+EOF
+
+    log "Created modprobe configuration: $modprobe_conf"
+}
+
+# Function to verify installation
+verify_intel_legacy_installation() {
+    # Check if xf86-video-intel is installed
+    if pacman -Q xf86-video-intel >/dev/null 2>&1; then
+        log "xf86-video-intel driver successfully installed"
+        return 0
+    else
+        log "xf86-video-intel driver installation verification failed"
+        return 1
+    fi
+}
+
+# Main function
+main() {
+    log "Starting Intel legacy GPU detection..."
+
+    # Check if we're in a live environment (only run in ISO)
+    if [[ ! -f /run/prismlinux/bootmenu ]]; then
+        log "Not in live environment, skipping"
+        exit 0
+    fi
+
+    # Check for Intel GPU
+    local intel_gpu_found=false
+    local legacy_gpu_found=false
+
+    if ! lspci -nn | grep -qi "VGA.*Intel\|Display.*Intel\|3D.*Intel"; then
+        log "No Intel GPU detected"
+        exit 0
+    fi
+
+    log "Intel GPU detected, analyzing hardware..."
+
+    # Process all Intel graphics devices
+    while IFS= read -r line; do
+        log "Processing: $line"
+
+        # Extract vendor and device ID using more robust regex
+        if [[ "$line" =~ \[([0-9a-fA-F]{4}):([0-9a-fA-F]{4})\] ]]; then
+            local vendor_id="${BASH_REMATCH[1]}"
+            local device_id="${BASH_REMATCH[2]}"
+
+            # Check if it's Intel (vendor ID 8086)
+            if [[ "${vendor_id^^}" == "8086" ]]; then
+                intel_gpu_found=true
+                local generation
+                generation=$(get_intel_gpu_info "$device_id")
+
+                log "Found Intel GPU - Device ID: $device_id, $generation"
+
+                # Check if it's a legacy GPU that needs xf86-video-intel
+                if is_intel_legacy_gpu "$device_id"; then
+                    legacy_gpu_found=true
+                    log "Legacy Intel GPU detected ($generation) - requires xf86-video-intel driver"
+
+                    # Install legacy driver packages
+                    if install_intel_legacy_packages; then
+                        # Configure system for legacy GPU
+                        configure_intel_legacy "$device_id" "$generation"
+
+                        # Verify installation
+                        if verify_intel_legacy_installation; then
+                            log "Successfully configured Intel legacy GPU support"
+                            return 0
+                        else
+                            log "Intel legacy GPU configuration verification failed"
+                            return 1
+                        fi
+                    else
+                        log "Failed to install Intel legacy driver packages"
+                        return 1
+                    fi
+                else
+                    log "Modern Intel GPU detected ($generation) - using default i915 driver"
+                fi
+            fi
+        else
+            log "Warning: Could not parse PCI device line: $line"
+        fi
+    done < <(lspci -nn | grep -iE "VGA|Display|3D" | grep -i "Intel")
+
+    if [[ "$intel_gpu_found" == true ]] && [[ "$legacy_gpu_found" == false ]]; then
+        log "Modern Intel GPU detected - no legacy driver configuration needed"
+    elif [[ "$intel_gpu_found" == false ]]; then
+        log "No Intel GPU found during detailed scan"
+    fi
+
+    return 0
+}
+
+# Run main function and exit with its status
+main "$@"

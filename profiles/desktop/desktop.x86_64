@@ -1,0 +1,50 @@
+# PrismLinux REPO
+about
+crystallize-gui
+
+# X11 SYSTEM (Xorg)
+egl-x11
+xf86-input-libinput
+xorg-server
+xorg-xinit
+xorg-xrandr
+xorg-xsetroot
+
+# GRAPHICS DRIVERS (AMD)
+xf86-video-amdgpu
+xf86-video-ati
+
+# AUDIO
+alsa-utils
+pipewire-jack
+pipewire-pulse
+rtkit
+sof-firmware
+wireplumber
+
+# BLUETOOTH
+bluedevil
+
+# LIVE ISO GUI TOOLS
+gparted
+
+# DESKTOP ENVIRONMENT (Plasma X11)
+breeze-gtk
+dolphin
+gwenview
+kcalc
+kde-gtk-config
+konsole
+kscreen
+plasma-desktop
+plasma-integration
+plasma-nm
+plasma-pa
+plasma-workspace
+plasma-x11-session
+qt6-multimedia-ffmpeg
+rxvt-unicode-terminfo
+spectacle
+
+# APPLICATIONS
+waterfox

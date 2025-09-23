@@ -1,12 +1,25 @@
 [Unit]
-Description=detect intel legacy gpu and install xf86-video-intel
+Description=Detect and configure Intel legacy GPU drivers
 DefaultDependencies=no
-After=local-fs.target
-Before=multi-user.target graphical.target
+After=local-fs.target systemd-modules-load.service
+Before=display-manager.service graphical.target
+Wants=systemd-modules-load.service
+ConditionPathExists=/usr/bin/intel-legacy-gpu
+ConditionVirtualization=!container
 
 [Service]
-Type=simple
-ExecStart=/bin/bash /usr/bin/intel-legacy-gpu-installer
+Type=oneshot
+ExecStart=/usr/bin/intel-legacy-gpu
+RemainAfterExit=yes
+TimeoutSec=30
+StandardOutput=journal
+StandardError=journal
+
+# Security hardening
+PrivateDevices=no
+ProtectSystem=false
+ProtectHome=true
+NoNewPrivileges=false
 
 [Install]
 WantedBy=multi-user.target

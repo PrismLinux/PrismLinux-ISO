@@ -1,0 +1,25 @@
+[Unit]
+Description=Detect and configure NVIDIA GPU drivers
+DefaultDependencies=no
+After=local-fs.target systemd-modules-load.service
+Before=display-manager.service graphical.target
+Wants=systemd-modules-load.service
+ConditionPathExists=/usr/bin/nvidia-detect
+ConditionVirtualization=!container
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/nvidia-detect
+RemainAfterExit=yes
+TimeoutSec=60
+StandardOutput=journal
+StandardError=journal
+
+# Security hardening
+PrivateDevices=no
+ProtectSystem=false
+ProtectHome=true
+NoNewPrivileges=false
+
+[Install]
+WantedBy=multi-user.target

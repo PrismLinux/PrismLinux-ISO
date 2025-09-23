@@ -21,5 +21,6 @@ file_permissions=(
   ["/etc/shadow"]="0:0:400"
   ["/etc/gshadow"]="0:0:400"
   ["/usr/bin/configurate-desktop"]="0:0:755"
-  ["/usr/bin/intel-legacy-gpu-installer"]="0:0:755"
+  ["/usr/bin/intel-legacy-gpu"]="0:0:755"
+  ["/usr/bin/nvidia-detect"]="0:0:755"
 )
