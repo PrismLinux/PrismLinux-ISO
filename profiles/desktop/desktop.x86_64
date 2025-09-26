@@ -10,7 +10,8 @@ xorg-xinit
 xorg-xrandr
 xorg-xsetroot
 
-# GRAPHICS DRIVERS (AMD)
+# GRAPHICS DRIVERS
+xf86-video-nouveau
 xf86-video-amdgpu
 xf86-video-ati
 
@@ -35,7 +36,6 @@ dolphin
 gwenview
 kcalc
 kde-gtk-config
-konsole
 kscreen
 plasma-desktop
 plasma-integration
@@ -45,7 +45,7 @@ plasma-workspace
 plasma-x11-session
 qt6-multimedia-ffmpeg
 rxvt-unicode-terminfo
-spectacle
 
 # APPLICATIONS
+kitty
 waterfox

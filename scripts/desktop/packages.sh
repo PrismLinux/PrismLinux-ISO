@@ -12,11 +12,11 @@ readonly PKGCACHE_DIR="/var/cache/pacman/pkg-prismlinux-build"
 
 # Driver definitions: "vendor/subdirectory/packages..."
 declare -Ar DRIVERS=(
-    ["nvidia-open"]="nvidia/open/nvidia-open nvidia-open-dkms nvidia-utils"
-    ["nvidia-470"]="nvidia/legacy-470/nvidia-470xx-dkms nvidia-470xx-utils"
-    ["nvidia-390"]="nvidia/legacy-390/nvidia-390xx-dkms nvidia-390xx-utils"
-    ["nvidia-340"]="nvidia/legacy-340/nvidia-340xx-dkms nvidia-340xx-utils"
-    ["nouveau"]="nvidia/nouveau/xf86-video-nouveau"
+    # ["nvidia-open"]="nvidia/open/nvidia-open nvidia-open-dkms nvidia-utils"
+    # ["nvidia-470"]="nvidia/legacy-470/nvidia-470xx-dkms nvidia-470xx-utils"
+    # ["nvidia-390"]="nvidia/legacy-390/nvidia-390xx-dkms nvidia-390xx-utils"
+    # ["nvidia-340"]="nvidia/legacy-340/nvidia-340xx-dkms nvidia-340xx-utils"
+    # ["nouveau"]="nvidia/nouveau/xf86-video-nouveau"
     ["intel-legacy"]="intel/legacy/xf86-video-intel"
 )
 
