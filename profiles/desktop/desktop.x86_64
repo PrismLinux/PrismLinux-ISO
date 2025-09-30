@@ -30,6 +30,7 @@ bluedevil
 gparted
 
 # DESKTOP ENVIRONMENT (Plasma X11)
+qt6-imageformats
 sddm
 breeze-gtk
 dolphin

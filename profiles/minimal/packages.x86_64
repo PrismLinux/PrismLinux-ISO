@@ -41,8 +41,7 @@ amd-ucode
 intel-ucode
 
 ## Graphics (Mesa Only)
-mesa-tkg-git
-lib32-mesa-tkg-git
+mesa
 
 ## General hardware
 lsscsi
