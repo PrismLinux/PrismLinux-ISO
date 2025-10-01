@@ -51,18 +51,36 @@ collect_unique_packages() {
     printf '%s\n' "${!unique_pkgs[@]}"
 }
 
-# Downloads all required packages
+# Downloads all required packages, ensuring they exist in the custom cache.
 download_packages() {
-    log "Downloading packages..."
+    log "Preparing package cache..."
     sudo mkdir -p "$PKGCACHE_DIR"
     sudo chown "$USER" "$PKGCACHE_DIR"
 
-    local packages
-    readarray -t packages < <(collect_unique_packages)
+    local packages_to_download=()
+    local all_packages
+    readarray -t all_packages < <(collect_unique_packages)
 
-    log "Downloading ${#packages[@]} unique packages..."
-    sudo pacman -Sw --noconfirm --needed --cachedir "$PKGCACHE_DIR" "${packages[@]}"
-    log "Package download complete."
+    log "Checking for ${#all_packages[@]} unique packages in the build cache..."
+    for pkg_name in "${all_packages[@]}"; do
+        # Check if a version of the package already exists in our custom build cache.
+        # We use a glob with `ls` to see if any version of the package file is present.
+        if ls "$PKGCACHE_DIR/$pkg_name"-*.pkg.tar.zst >/dev/null 2>&1; then
+            log "  -> Found '$pkg_name' in build cache. Skipping."
+        else
+            log "  -> Marking '$pkg_name' for download."
+            packages_to_download+=("$pkg_name")
+        fi
+    done
+
+    if [[ ${#packages_to_download[@]} -gt 0 ]]; then
+        log "Downloading ${#packages_to_download[@]} missing packages..."
+        sudo pacman -Sw --noconfirm --cachedir "$PKGCACHE_DIR" "${packages_to_download[@]}"
+    else
+        log "All required packages are already in the build cache."
+    fi
+
+    log "Package cache preparation complete."
 }
 
 # Distributes packages to their respective directories
@@ -78,7 +96,7 @@ distribute_packages() {
 
         log "  -> Processing $driver into $target_dir"
         for pkg_name in $packages; do
-            # Find the package file in the cache (handling version variations)
+            # Find the package file in our custom cache (handling version variations)
             local pkg_file
             pkg_file=$(find "$PKGCACHE_DIR" -name "$pkg_name-*.pkg.tar.zst" -print -quit)
 
