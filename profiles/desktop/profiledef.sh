@@ -11,7 +11,7 @@ buildmodes=('iso')
 quiet="n"
 work_dir="work"
 out_dir="out"
-bootmodes=('bios.syslinux.mbr' 'bios.syslinux.eltorito' 'uefi-x64.grub.esp' 'uefi-x64.grub.eltorito')
+bootmodes=('bios.syslinux' 'uefi.grub')
 
 arch="x86_64"
 pacman_conf="pacman.conf"
