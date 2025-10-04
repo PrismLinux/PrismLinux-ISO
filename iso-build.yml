@@ -6,7 +6,7 @@ definitions:
       pkglist: true
       gpgsign:
         sign: false
-        key: "your-gpg-key-id"
+        key: "938D3ECC7EB864643C66CEAD94D7BFE7C01BDCF5"
 
 # Profile definitions
 profiles:
